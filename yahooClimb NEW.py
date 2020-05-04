@@ -36,7 +36,7 @@ def getContent():
           for p in article_ps:
             if str(p.string) != "None":
               content+=(str(p.string))
-
+      cursor.execute("create table if not exists resultyahoo (ID INTEGER PRIMARY KEY   AUTOINCREMENT,source text, URL text, content text) ")
       sql = "insert into resultyahoo (source,URL,content ) values ('yahoo','"+ url +"','"+ content + "')" 
       cursor.execute(sql)
       connection.commit()
@@ -78,18 +78,21 @@ def getSummary(r):
 
   for i in range(0,10):
     sumList.append(str(jsonContent["data"][i]['summary']))
+def yahooCLimb(pagenum,keyword):
+  for i in range(0,pagenum):
+    url = 'https://tw.news.yahoo.com/_td-news/api/resource/NewsSearchService;loadMore=true;mrs=%7B%22size%22%3A%7B%22w%22%3A220%2C%22h%22%3A128%7D%7D;offset='+ str(i)*10 +';query='+ keyword +';usePrefetch=false?bkt=news-TW-zh-Hant-TW-def&device=desktop&feature=videoDocking&intl=tw&lang=zh-Hant-TW&partner=none&prid=52d6sotf613pr&region=TW&site=news&tz=Asia%2FTaipei&ver=2.3.1371&returnMeta=true'
+    r = requests.get(url)
+    getURL(r) 
+    # gettitle(r)
+    # getSummary(r)
+    
+  # print(urlList)
+  # print(sumList)
+  # print(titleList)  
+  # print(len(urlList))
+  # print(len(titleList))
+  # print(len(sumList))
+  getContent()
+# yahooCLimb(2,'口罩')
 
-for i in range(0,2):
-  url = 'https://tw.news.yahoo.com/_td-news/api/resource/NewsSearchService;loadMore=true;mrs=%7B%22size%22%3A%7B%22w%22%3A220%2C%22h%22%3A128%7D%7D;offset='+ str(offset) +';query='+ keyword +';usePrefetch=false?bkt=news-TW-zh-Hant-TW-def&device=desktop&feature=videoDocking&intl=tw&lang=zh-Hant-TW&partner=none&prid=52d6sotf613pr&region=TW&site=news&tz=Asia%2FTaipei&ver=2.3.1371&returnMeta=true'
-  r = requests.get(url)
-  getURL(r) 
-  # gettitle(r)
-  # getSummary(r)
-  offset += 10
-# print(urlList)
-# print(sumList)
-# print(titleList)  
-# print(len(urlList))
-# print(len(titleList))
-# print(len(sumList))
-getContent()
+#json那邊出了問題
